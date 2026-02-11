@@ -1,0 +1,41 @@
+// problem : find building where alice and bob can meet
+// plaform : leetcode - 2940
+// difficulty : hard
+// date : 11/2/26
+// this is only the brute force approach 
+#include <bits/stdc++.h>
+using namespace std;
+class Solution {
+public:
+    vector<int> leftmostBuildingQueries(vector<int>& heights, vector<vector<int>>& queries) {
+        vector<int> ans;
+        for(int i = 0 ;i<queries.size();i++){
+            vector<int>v = queries[i];
+            int apos = v[0];
+            int bpos = v[1];
+           if(apos == bpos){
+            ans.push_back(apos);
+            continue;
+           }
+           int left = min(apos,bpos);
+           int right = max(apos,bpos);
+           if(heights[right]>heights[left]){
+                ans.push_back(right);
+                continue;
+            }
+            int result = -1;
+           int j = right +1 ;
+            while(j<heights.size()){  
+                if(heights[j] > heights[left] &&  heights[j] > heights[right]){
+                    result = j ;
+                    break;
+                }
+                else{
+                    j++;
+                }
+            }
+            ans.push_back(result);
+        }
+      return ans;  
+    }
+};
