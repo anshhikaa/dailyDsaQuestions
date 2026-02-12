@@ -1,0 +1,53 @@
+// problem : diagonal traversal
+// platform : gfg
+// difficulty : medium
+// date : 12/2/26
+#include <bits/stdc++.h>
+using namespace std;
+
+//approach 1 - recursion+mapping , numbering of nodes
+class Solution {
+  public:
+  void makeMap(Node*root ,int d , map<int,vector<int>>&mp){
+      if(!root) return ;
+      //for a particular d make a map for all nodes with that numbering
+      mp[d].push_back(root->data);
+      makeMap(root->left,d+1,mp);
+      makeMap(root->right,d,mp);
+  }
+    vector<int> diagonal(Node *root) {
+        map<int,vector<int>>mp;
+        makeMap(root,0,mp);
+        vector<int>ans;
+        //travervse the map and then print the numbering vectors one by one
+        for(auto &it :mp){
+            for(int val : it.second)
+            ans.push_back(val);
+        }
+       return ans;
+    }
+};
+
+//approach 2 - iterative + using queue to store left child
+class Solution {
+  public:
+    vector<int> diagonal(Node *root) {
+        // code here
+        vector<int>ans;
+        if(!root) return ans ;
+        queue<Node*>q ;
+        q.push(root);
+        while(!q.empty()){
+            Node * curr = q.front();
+            q.pop();
+            while(curr!=NULL){
+                ans.push_back(curr->data);
+                if(curr->left){
+                    q.push(curr->left);
+                }
+                curr = curr->right;
+            }
+        }
+        return ans;
+    }
+};
