@@ -1,0 +1,58 @@
+//problem : Vertical order traversal of a binary tree
+// platform : leetcode 987
+// difficulty : hard
+// T.C = O(NlogN)  , S.C = O(n)
+/*  complexity explained - traversal(level order) = o[n];
+                           insertion in map[col][row] =o(logn);
+                           insertion in map[row][multiset] = o[logn];
+                           insetion in multiset = o[logm];
+                           total complecity = o[n]+o[logn]+o[logn]+o[logm] = o[logn];
+                           for n nodes = o(nlogn);
+*/
+# include<bits/stdc++.h>
+using namespace std ;
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<vector<int>>ans;
+        queue<pair<TreeNode*,pair<int,int>>>q; // (node,(row,col))
+        q.push({root,{0,0}});
+        map<int,map<int,multiset<int>>>mp;
+        while(!q.empty()){
+         auto front = q.front(); q.pop();
+          TreeNode* &node = front.first; 
+          auto coordinate = front.second;
+          int row = coordinate.first;
+          int col = coordinate.second;
+          mp[col][row].insert(node->val);
+          if(node->left!=NULL){
+            q.push({node->left,{row+1,col-1}});
+          }
+          if(node->right!=NULL){
+            q.push({node->right,{row+1,col+1}});
+          }
+        }
+        //store final ans
+        for(auto it:mp){
+             auto &colMap = it.second;
+             vector<int>verticalLine;
+             for(auto colMapIt : colMap){
+                auto &mSet = colMapIt.second;
+                verticalLine.insert(verticalLine.end(),mSet.begin(),mSet.end());
+             }
+               ans.push_back(verticalLine);
+        }
+        return ans;
+    }
+};
