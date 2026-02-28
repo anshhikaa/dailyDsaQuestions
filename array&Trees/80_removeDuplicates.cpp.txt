@@ -1,0 +1,22 @@
+// problem : remove dulicates 2
+// platform : leetcode 80 
+// tc = o(n) , sc = o(1) , check i with index-2
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int i = 1 ;
+        int j = 0 ;
+        while(j<nums.size()){
+            if(nums[i] == nums[i+1]){
+                j++;
+                i++;
+            }
+             else if(nums[i] !=nums[i+1]){
+                j++;
+                nums[j]= nums[i+1];
+                i++;
+             }
+        }
+       return j ; 
+    }
+};
