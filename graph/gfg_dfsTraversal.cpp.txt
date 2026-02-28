@@ -1,0 +1,24 @@
+//problem : dfs traversal
+// platform : gfg
+// tc = o(n) + o(2E),sc = O(n)
+class Solution {
+  public:
+  void dfsTraversal(int node ,vector<vector<int>>& adj, int visited[], vector<int>&dfsAns){
+      visited[node] = 1 ;
+      dfsAns.push_back(node);
+      for(auto it: adj[node]){
+          if(!visited[it]){
+              dfsTraversal(it,adj,visited,dfsAns);
+          }
+      }
+  }
+    vector<int> dfs(vector<vector<int>>& adj) {
+       int n = adj.size();
+       int visited[n] ={0};
+       int start = 0 ;
+       vector<int>dfsAns ;
+       dfsTraversal(start,adj,visited,dfsAns);
+       return dfsAns;
+    }
+    
+};
