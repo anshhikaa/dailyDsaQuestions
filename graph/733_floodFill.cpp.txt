@@ -1,0 +1,26 @@
+//problem : flood fill 
+// leetcode 733
+// tc = o(n*m) , sc =o(n*m)
+class Solution {
+public:
+void dfs(int row , int col ,int color, int initialColour, vector<vector<int>> &image,vector<vector<int>>&ans){
+    int delRow[] = {0,-1,0,1};
+    int delCol[] = {-1,0,1,0};
+    int n = image.size();
+    int m = image[0].size();
+    ans[row][col] = color ;
+    for(int i = 0 ; i < 4 ;i++){
+        int nrow = row + delRow[i];
+        int mcol = col + delCol[i];
+        if(nrow >= 0 && nrow < n && mcol >= 0 && mcol < m && image[nrow][mcol] == initialColour && ans[nrow][mcol] != color){
+           dfs(nrow,mcol,color,initialColour,image,ans);
+        }
+    }
+}
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int initialColour = image[sr][sc];
+        vector<vector<int>>ans = image ;
+        dfs(sr,sc,color,initialColour,image,ans);
+        return ans;
+    }
+}; 
