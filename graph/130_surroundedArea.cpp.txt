@@ -1,0 +1,51 @@
+//problem : surrounded area onvert o ->x
+// platform : leetcode 130
+// tc = o(nxm) , sc = o(nxm)
+class Solution {
+public:
+void dfs(int r , int c ,vector<vector<int>>&vis,vector<vector<char>>& board ){
+    int n = board.size();
+    int m = board[0].size();
+    vis[r][c] = 1 ;
+    int delRow[]= {0,-1,0,1};
+    int delCol[]= {-1,0,1,0};
+    for(int i = 0 ; i < 4; i++ ){
+        int nrow = r + delRow[i];
+        int mcol = c + delCol[i];
+        if(nrow >= 0 && nrow < n && mcol >=0 && mcol< m && vis[nrow][mcol] != 1 && board[nrow][mcol] == '0'){
+            dfs(nrow,mcol,vis,board);
+        }
+    }
+}
+    void solve(vector<vector<char>>& board) {
+        int n = board.size();
+        int m = board[0].size();
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        //first & last row
+        for(int j =  0 ; j < m ;j++){
+            if(vis[0][j] != 1 && board[0][j] == '0'){
+                dfs(0,j,vis,board);
+            }
+            if(vis[n-1][j] != 1 && board[n-1][j]=='0'){
+                dfs(n-1,j,vis,board);
+            }
+        }
+        //first col & last col
+        for(int i = 0 ; i < n ; i++){
+            if(vis[i][0] != 1 && board[i][0] == '0'){
+                dfs(i,0,vis,board);
+            }
+            if(vis[i][n-1] != 1 && board[i][n-1] == '0'){
+                dfs(i,0,vis,board);
+            }
+        }
+        // inner row and cols
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0 ; j< m ;j++){
+                if(board[i][j] == '0' && vis[i][j] != 1){
+                   board[i][j] = 'X';
+                }
+            }
+        } 
+    }
+};
