@@ -37,3 +37,42 @@ class Solution {
         return ans;
     }
 };
+
+//approach - bfs kahns algo
+class Solution {
+  public:
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        // code here
+        queue<int>q ;
+        vector<int>inDegree(V,0);
+        vector<vector<int>>adjls(V);
+        for(int i = 0 ; i<edges.size();i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adjls[u].push_back(v);
+        }
+        for(int i = 0 ; i<V;i++){
+             for(auto it : adjls[i]){
+                 inDegree[it]++;
+             }
+        }
+        for(int i = 0 ;i < V; i++){
+            if(inDegree[i]==0){
+                q.push(i);
+            }
+        }
+        vector<int>ans;
+        //bfs algo
+        while(!q.empty()){
+            int node = q.front(); q.pop();
+            ans.push_back(node);
+            for(auto it : adjls[node]){
+                inDegree[it]--;
+                if(inDegree[it]==0){
+                    q.push(it);
+                }
+            }
+        }
+      return ans;
+    }
+};
