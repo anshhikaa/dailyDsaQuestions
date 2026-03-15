@@ -1,0 +1,61 @@
+//problem : alien dictionary 
+// platofrm : gfg 
+// tc = o(n*m+k+e) , sc = o(k);
+ public:
+    string findOrder(vector<string> &words) {
+        // code here
+        vector<vector<int>>adjls(26);
+        for(int i = 0 ; i<words.size()-1;i++){
+            string s1 = words[i];
+            string s2 = words[i+1];
+            bool found = false;
+            int n = min(s1.length(),s2.length());
+            for(int j = 0 ; j <n ;j++){
+                if(s1[j] != s2[j]){
+                    adjls[s1[j]-'a'].push_back(s2[j]-'a');
+                    found = true;
+                    break;
+                }
+            }
+            if(!found && s1.length()>s2.length()){
+                return "";
+            }
+        }
+        //topo srt 
+        queue<int>q ; 
+        vector<int>inDegree(26,0);
+        int size = 0 ;
+        vector<bool>present(26,false);
+        for(auto &w:words){
+            for(auto c : w){
+                if(!present[c-'a']){
+                     present[c-'a'] = true;
+                    size++; 
+                }
+            }
+        }
+        for(int i = 0 ; i < 26 ; i++ ){
+            for(auto it : adjls[i]){
+                inDegree[it]++;
+            }
+        }
+        for(int i = 0 ; i<26;i++){
+            if(inDegree[i] == 0 && present[i]){
+                q.push(i);
+            }
+        }
+       string ans="" ;
+        while(!q.empty()){
+            int node = q.front() ; q.pop();
+            ans.push_back(node+'a');
+            for(auto it : adjls[node]){
+                inDegree[it]--;
+                if(inDegree[it] == 0){
+                    q.push(it);
+                }
+            }
+        }
+       if(ans.length()==size) return ans ;
+       return "";
+    }
+};
