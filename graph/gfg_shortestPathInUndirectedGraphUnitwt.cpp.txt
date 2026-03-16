@@ -1,0 +1,39 @@
+//problem : shortest path in undirected grpah with unit wt 
+// platform : gfg
+// approach - bfs+dist vector o(v+e) , o(v)
+class Solution {
+  public:
+    vector<int> shortestPath(int V, vector<vector<int>> &edges, int src) {
+        // code here
+        vector<vector<int>>adjls(V);
+        for(int i = 0 ; i<edges.size();i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            adjls[u].push_back(v);
+            adjls[v].push_back(u);
+        }
+        vector<int>dist(V);
+        for(int i = 0 ;i<V;i++){
+            dist[i] = INT_MAX;
+        }
+         dist[src]= 0 ;
+        queue<int>q ;
+        q.push(src);
+        while(!q.empty()){
+          int node = q.front() ; q.pop();
+            for(auto it : adjls[node]){
+                if(dist[it] > dist[node]+1){
+                    dist[it] = dist[node]+1;
+                    q.push(it);
+                }
+            }
+        }
+        for(int i = 0 ; i<V;i++){
+            if(dist[i] == INT_MAX){
+                dist[i] = -1;
+            }
+        }
+        return dist;
+    }
+};
+
