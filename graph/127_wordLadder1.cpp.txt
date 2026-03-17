@@ -1,0 +1,35 @@
+//problem : word ladder 1 
+// platform : leetcode 127
+//approach bfs search o(n*wordlength*26*logn) , sc = o(n)
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue<pair<string,int>>q ;
+        q.push({beginWord,1});
+        //create a set of wordList
+        unordered_set<string>st ;
+        for(int i = 0 ; i< wordList.size();i++){
+            st.insert(wordList[i]);
+        }
+        st.erase(beginWord);
+        while(!q.empty()){
+            auto[word,level] = q.front();q.pop();
+            if(word== endWord){
+                return level;
+            }
+            //tranform word & compare to wordlist set
+            for(int i = 0 ; i<word.length();i++){
+                char original = word[i];
+                for(char c = 'a' ; c<='z';c++){
+                    word[i] = c ;
+                    if(st.find(word) != st.end()){
+                        st.erase(word);
+                        q.push({word,level+1});
+                    }
+                }
+                word[i]=original;
+            }
+        }
+        return 0 ;
+    }
+};
