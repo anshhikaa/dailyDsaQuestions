@@ -1,0 +1,55 @@
+//problem : minimum platofrm 
+// platform : gfg 
+// approach - combine both arrays ,sort , simple maxcount & count update 
+// tc = o(nlogn) , sc = o(n)
+  public:
+    // Function to find the maximum number of meetings that can
+    // be performed in a meeting room.
+    int maxMeetings(vector<int>& start, vector<int>& end) {
+        vector<pair<pair<int,int>,int>>meeting;
+        for(int i = 0 ; i< start.size(); i++){
+            meeting.push_back({{start[i],end[i]},i+1});
+        }
+        //sorting
+        sort(meeting.begin(), meeting.end(), [](auto &a, auto &b){
+    return a.first.second < b.first.second;});
+        //greedy comparison 
+        int count = 1 ;
+        if(meeting.size()==0) return 1 ;
+        int freeTime = meeting[0].first.second ;
+        for(int i = 1 ; i<meeting.size();i++){
+           int startTime = meeting[i].first.first;
+           if(startTime>freeTime){
+               count ++;
+               freeTime = meeting[i].first.second;
+           }
+        }
+        return count ;
+    }
+
+
+// approach sc = o(1) sort + two pointers
+  public:
+    // Function to find the maximum number of meetings that can
+    // be performed in a meeting room.
+    int maxMeetings(vector<int>& start, vector<int>& end) {
+        vector<pair<pair<int,int>,int>>meeting;
+        for(int i = 0 ; i< start.size(); i++){
+            meeting.push_back({{start[i],end[i]},i+1});
+        }
+        //sorting
+        sort(meeting.begin(), meeting.end(), [](auto &a, auto &b){
+    return a.first.second < b.first.second;});
+        //greedy comparison 
+        int count = 1 ;
+        if(meeting.size()==0) return 1 ;
+        int freeTime = meeting[0].first.second ;
+        for(int i = 1 ; i<meeting.size();i++){
+           int startTime = meeting[i].first.first;
+           if(startTime>freeTime){
+               count ++;
+               freeTime = meeting[i].first.second;
+           }
+        }
+        return count ;
+    }
