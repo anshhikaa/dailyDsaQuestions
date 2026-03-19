@@ -1,0 +1,22 @@
+//problem : assign cookies
+// platform : leetcode 455
+// approach  - sort and two pointer tc = o(nlogn) ,sc =o(1)
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+       int greed = 0 ;
+       int cookie = 0 ;
+        while(greed < g.size() && cookie < s.size()){
+            if(s[cookie] >= g[greed]){
+                cookie ++;
+                greed++;
+            }
+            else if(g[greed] > s[cookie]){
+                cookie++;
+            }
+        }
+       return greed; 
+    }
+};
