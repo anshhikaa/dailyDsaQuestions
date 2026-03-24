@@ -1,0 +1,31 @@
+//problem  luck balance 
+// greedy - sort + push to another vecctor , find k
+int luckBalance(int k, vector<vector<int>> contests) {
+      int luck = 0 ;
+    vector<int>st ;
+    int n = contests.size();
+    for(int i = 0 ; i< n ;i++ ){
+      int val = contests[i][0];
+      int imp = contests[i][1];
+        if(imp == 0 ){
+          luck += val;
+        }
+        else{
+      st.push_back(val);
+        }
+    }
+    sort(st.begin(),st.end(),[](int a , int b){
+         return a > b ;
+    });
+    int j = 0 ;
+   int size = min((int)st.size(),k);
+    while(j<size){
+    luck+=st[j];
+        j++;
+    }
+    if(j< st.size())
+    for(int i =  size ; i<(int)st.size();i++){
+     luck-= st[i];
+    }
+   return luck;   
+}
