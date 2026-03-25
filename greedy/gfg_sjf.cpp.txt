@@ -1,0 +1,17 @@
+//problem : shortest job first 
+// approach - greedy (sort and calc t & wt) tc= o(nlogn) , o(1)
+class Solution {
+  public:
+    long long solve(vector<int>& bt) {
+        sort(bt.begin(),bt.end());
+        int t = 0 ;
+        int wt = 0 ;
+        int n = bt.size();
+        for(int i = 0 ;  i< n-1;i++){
+            t += bt[i];
+            wt += t;
+        }
+        long long avgWt = wt/n;
+        return avgWt; 
+    }
+};
