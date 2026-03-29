@@ -1,0 +1,40 @@
+//problem : jumpgame 2 
+// approach 1 - recursion - exponenetial tc
+class Solution {
+public:
+int maxJump(int i ,vector<int>&nums){
+    //base case 
+    int n = nums.size();
+    if(i >= n-1) return 0;
+    int jump = INT_MAX;
+        for(int j = i + 1 ; j <=  i+ nums[i] && j < n ; j++){
+       int step = maxJump(j,nums);
+       if(step != INT_MAX){
+            jump = min(jump, 1 + step);
+            }
+    }
+    return jump ;
+}
+    int jump(vector<int>& nums) {
+       return  maxJump(0,nums);
+    }
+};
+// approach 2 - dp - n^2 tc
+
+// approach 3  - greedy- linear tc
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int jump = 0 ;
+        int currJump = 0 ;
+        int farthest = 0 ;
+        for(int i = 0 ; i< nums.size()-1;i++){
+            farthest = max(farthest,i+nums[i]);
+            if(i== currJump){
+                currJump = farthest ;
+                jump++;
+            }
+        }
+       return jump; 
+    }
+};
