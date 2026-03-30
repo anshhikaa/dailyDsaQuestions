@@ -1,0 +1,40 @@
+//problem ; job sequencing 
+// approach : sort , deadline array (backwards traverse) 
+// t c= o(nlogn ) + o(maxDeadline*n)- tle(1110/1115) , sc = o(maxDeadline)  
+class Solution {
+  public:
+    vector<int> jobSequencing(vector<int> &deadline, vector<int> &profit) {
+        // code here
+        //create job = {(proft,deadline) , (profit,deadline)...}
+        int jobs = profit.size();
+        vector<vector<int>>job(jobs);
+        int maxDeadline = -1 ;
+        for(int i = 0 ; i < jobs ; i ++){
+            // create job data structure
+            job[i].push_back(profit[i]);
+            job[i].push_back(deadline[i]);
+            //track maxDeadline 
+            maxDeadline = max(maxDeadline,deadline[i]);
+        }
+        //sort
+        sort(job.begin(),job.end(),[](const vector<int>&job1 ,const vector<int>&job2){
+            return job1[0]>job2[0];
+        });
+        vector<int>deadlines(maxDeadline+1,-1);
+        int jobCount = 0;
+        int totalProfit = 0 ;
+        for(int i = 0 ; i < jobs ; i++){
+        for(int j = job[i][1] ; j > 0 ; j--){
+                if(deadlines[j]==-1){
+                    deadlines[j]= i ;
+                    jobCount ++;
+                    totalProfit += job[i][0];
+                    break;
+                }
+            }
+        }
+        return {jobCount,totalProfit};
+    }
+};
+
+//Optimise - disjoint set
