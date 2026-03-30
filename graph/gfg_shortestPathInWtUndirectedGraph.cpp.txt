@@ -1,0 +1,48 @@
+//shortest path from 1-n in weigthes undirected graph using dijkstras algo tc = o(elogv)
+// path making + dijkstras algo
+class Solution {
+  public:
+    vector<int> shortestPath(int n, int m, vector<vector<int>>& edges) {
+        // Code here
+        //edges list to adjlist 
+        vector<vector<pair<int,int>>>adjls(n+1);
+        for(int i = 0 ; i< m;i++){
+            int u = edges[i][0];
+            int v= edges[i][1];
+            int wt = edges[i][2];
+            adjls[u].push_back({v,wt});
+            adjls[v].push_back({u,wt});
+        }
+        //using priority q 
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+        vector<int>dist(n+1,INT_MAX) ,parent(n+1,-1);
+        dist[1] = 0 ;
+        pq.push({0,1});
+        while(!pq.empty()){
+            auto [dis,node]= pq.top(); 
+            pq.pop();
+            if(dis>dist[node])continue;
+            
+            for(auto it : adjls[node]){
+                int adjnode = it.first ;
+                int wt = it.second ;
+                if(dis + wt < dist[adjnode]){
+                    dist[adjnode] = dis + wt ;
+                    pq.push({dist[adjnode],adjnode});
+                    parent[adjnode] = node;
+                }
+            }
+        }
+        if(dist[n]==INT_MAX) return {-1};
+        vector<int>path ;
+        int node = n ;
+        while(node != -1){
+            path.push_back(node);
+            node = parent[node];
+        }
+        reverse(path.begin(),path.end());
+        path.insert(path.begin(), dist[n]);
+
+return path;
+    }
+};
