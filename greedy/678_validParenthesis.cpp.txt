@@ -1,0 +1,25 @@
+// approach - maintain min and max range , min csn never go below 0 , and max<0 false
+class Solution {
+public:
+    bool checkValidString(string s) {
+        int min = 0 ;
+        int max = 0 ;
+        for(char c : s){
+            if(c=='('){
+                min++;
+                max ++;
+            }
+            else if(c==')'){
+                min--;
+                max --;
+            }
+            else{
+                min -- ;
+                max ++;
+            }
+            if(min == -1) min = 0;
+            if(max == -1) return false;
+        }
+        return (min==0);
+    }
+};
