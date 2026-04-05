@@ -1,0 +1,28 @@
+//fractional knapsack 
+class Solution {
+  public:
+    double fractionalKnapsack(vector<int>& val, vector<int>& wt, int capacity) {
+        // code here
+        int n = val.size();
+        vector<pair<int,int>>valwt(n);
+        for(int i =  0 ; i < n ;i++){
+            valwt[i] = {val[i],wt[i]};
+        }
+        sort(valwt.begin(),valwt.end(),[](pair<int,int>&a , pair<int,int>&b){
+            return (double)a.first/a.second > (double)b.first/b.second;
+        });
+        double ans = 0;
+        for(int i  = 0 ; i < n ;i++){
+            if(capacity >= valwt[i].second){
+                capacity -= valwt[i].second;
+                ans += valwt[i].first ;
+            }
+            else{
+                double frac = ((double)valwt[i].first/valwt[i].second)* capacity ;
+                ans += frac; 
+                break;
+            }
+        }
+        return ans ;
+    }
+};
