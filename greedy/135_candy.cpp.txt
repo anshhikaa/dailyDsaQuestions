@@ -1,0 +1,59 @@
+//candy approach left & right array then sum max(left,right)
+// tc= o(3n), sc= o(2n)
+class Solution {
+public:
+bool check(string &s , int i , int count,int n){
+    if(count < 0) return false ;
+    if( i == n ) {
+        return(count == 0) ;
+    }
+    if(s[i] == '('){
+        return check(s,i+1,count+1,n);
+    }
+    if(s[i] == ')'){
+        return check(s,i+1,count-1,n);
+    }
+        return check(s,i+1,count-1,n) || check(s,i+1,count+1,n) || check(s,i+1,count,n);
+}
+    bool checkValidString(string s) {
+     return check(s,0,0,s.length());   
+    }
+};
+
+//without sc o (1) approach tracking peak and down-slope approach ifpeak-down = sum+=(peak-down)
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        //slope solution 
+        int n = ratings.size();
+        int i = 1 ; 
+        int sum = 1 ;
+        while(i<n){
+            //flat surface 
+            if(ratings[i] == ratings[i-1]){
+                sum += 1 ;
+                i++;
+                continue ;
+            }
+            //increasing slope 
+             int peak = 1;
+            while(i<n && ratings[i] > ratings[i-1]){
+                peak++;
+                sum += peak ;
+                i++;
+            }
+           
+            //decreasing slope 
+            int down = 1 ;
+            while(i<n && ratings[i] < ratings[i-1]){
+                sum += down ;
+                down ++;
+                i++;
+            }
+            if(down > peak){
+          sum += (down-peak);
+            }
+        }
+        return sum;
+    }
+};
