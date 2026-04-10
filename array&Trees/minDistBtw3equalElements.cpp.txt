@@ -1,0 +1,26 @@
+//problem : min distance btw three equal elements
+// tc  = o (nlogn) , sc o(n)
+class Solution {
+public:
+    int minimumDistance(vector<int>& nums) {
+        unordered_map<int,vector<int>>mp;
+        for(int i  = 0  ; i< nums.size();i++){
+              mp[nums[i]].push_back(i);
+        }
+        int ans = INT_MAX ;
+        for(auto it : mp){
+            int num = it.first ;
+            vector<int>&idx = it.second ;
+            sort(idx.begin(),idx.end());
+            //calculate 
+            if(idx.size()>=3){
+                for(int i = 0 ; i+2 < idx.size();i++){
+                int sum = 2 * (idx[i+2] - idx[i]);
+                ans = min(sum , ans);
+                }
+            }
+        }
+        if(ans == INT_MAX) return -1 ;
+        return ans ;
+    }
+};
