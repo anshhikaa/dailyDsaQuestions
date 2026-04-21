@@ -1,0 +1,24 @@
+//minimum muliplication to reach end 
+//approach bfs + 100000 distance array
+class Solution {
+  public:
+    int minimumMultiplications(vector<int>& arr, int start, int end) {
+        // code here
+        queue<pair<int,int>> q ;
+        q.push({start,0});
+        vector<int>mul(100000,INT_MAX);
+        mul[start] = 0;
+        while(!q.empty()){
+            auto[newStart,dis] = q.front(); q.pop();
+            if(newStart == end) return dis ;
+            for(int i = 0 ; i < arr.size();i++){
+                int ns = (newStart * arr[i]) % 100000;
+                if(mul[ns] > dis+1){
+                    mul[ns] = dis;
+                    q.push({ns,dis+1});
+                }
+            }
+        }
+      return -1 ;
+    }
+};
