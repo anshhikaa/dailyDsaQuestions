@@ -1,0 +1,34 @@
+//dijkstra isnt necessary as we are incrementing with +1 at each step (two condition check cheap dist + within k +1 ranges stops)
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        queue<vector<int>>pq ;
+        vector<int>dist(n,INT_MAX);
+        dist[src]= 0 ;
+        int ansDis = INT_MAX ;
+        pq.push({0,src,0}); //stop,node,dist
+      while(!pq.empty()){
+            //extrac tthe front 
+            vector<int> v = pq.front();
+            int stop = v[0];
+            int node = v[1];
+            int dis = v[2];
+            pq.pop();
+            //conditions k , node = des
+           if(stop > k) continue ;
+         //traverse in flights push all the paths with lesser distance into the pq 
+         for(int i = 0 ; i < flights.size() ; i++){
+            if(flights[i][0] == node){
+                int nextNode = flights[i][1];
+                int nDis = flights[i][2];
+                if( nDis +dis < dist[nextNode] && stop <= k ){
+                  pq.push({stop+1,nextNode,dis + nDis}) ;
+                  dist[nextNode] = dis + nDis;
+                }
+            }
+          }
+        } 
+        if(dist[dst] ==INT_MAX) return -1;
+       return dist[dst] ;
+    }
+};
