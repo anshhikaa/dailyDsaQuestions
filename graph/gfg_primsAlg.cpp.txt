@@ -1,0 +1,35 @@
+//approach - only mark visited after pop from pq and check vis/not when pushing into pq
+class{ 
+ public:
+    int spanningTree(int V, vector<vector<int>>& edges) {
+        vector<int>vis(V,0);
+        vector<vector<pair<int,int>>>adjls(V);
+        for(auto it : edges){
+            int u = it[0];
+            int v = it[1];
+            int wt = it[2];
+            adjls[u].push_back({v,wt});
+            adjls[v].push_back({u,wt});
+        }
+         priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>>pq ;
+         pq.push({0,0});
+         int sum = 0 ;
+         while(!pq.empty()){
+            vector<int>v = pq.top();
+            int wt = v[0];
+            int node = v[1];
+            pq.pop();
+            if(vis[node]==1)continue;
+            vis[node]=1;
+            sum+=wt;
+             for(auto it: adjls[node]){
+                 int adjnode = it.first;
+                 int nwt = it.second ;
+                 if(!vis[adjnode]){
+                     pq.push({nwt,adjnode});
+                    }
+                }
+          }
+        return sum ;
+    }
+};
