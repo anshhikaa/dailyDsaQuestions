@@ -1,0 +1,93 @@
+//using disjoint logic created vis array as matrix to track island , merging logic 
+class DisjointSet{
+    public:
+    vector<int> rank , parent,size  ;
+    DisjointSet(int n ){
+        //attributes
+        rank.resize(n+1,0);
+        parent.resize(n+1);
+        size.resize(n+1);
+        for(int i = 0 ; i <= n ;i++){
+            parent[i]=i;
+            size[i] = 1;
+        }
+    }
+    //methods
+    int findParent(int node){
+        //base case
+        if(parent[node]==node) return node ;
+        //recursion
+        return parent[node]=findParent(parent[node]);
+    }
+    void unionByRank(int u , int v){
+        //find ultimate parent
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        //check rank(ultimate parent)
+        if(ulp_u == ulp_v) return ;
+        //connect smaller to the higher rank ultimate parent
+        if(rank[ulp_u] < rank[ulp_v]){
+            parent[ulp_u] = ulp_v;
+        }
+        else if(rank[ulp_v] < rank[ulp_u]){
+            parent[ulp_v] = ulp_u;
+        }
+        else{
+            parent[ulp_v] = ulp_u;
+             rank[ulp_u]++;
+        }
+    }
+     void unionBySize(int u , int v){
+        //find ultimate parent
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        //check size(ultimate parent)
+        if(ulp_u == ulp_v) return ;
+        if(size[ulp_u]<size[ulp_v]){
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] +=size[ulp_u];
+        }
+        else{
+            parent[ulp_v]=ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+class Solution {
+  public:
+    vector<int> numOfIslands(int n, int m, vector<vector<int>> &operators) {
+        DisjointSet ds(n*m);
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        int count = 0 ;
+        vector<int>ans ;
+        for(auto it : operators){
+            int i = it[0];
+            int j = it[1];
+            if(vis[i][j]==1){
+                ans.push_back(count);
+                continue ;
+            }
+                vis[i][j]= 1;
+                count ++;
+                //check surroundings 
+                int dr[] = {-1,0,1,0};
+                int dc[] = { 0,1,0,-1};
+                for(int k = 0 ; k  <  4 ; k++){
+                    int newi = i + dr[k];
+                    int newj = j + dc[k];
+                    if(newi >= 0  && newj >= 0 && newi < n && newj < m){
+                        if(vis[newi][newj]==1){
+                            int node = i*m +j;
+                            int adjNode = newi*m+newj;
+                            if(ds.findParent(node) != ds.findParent(adjNode)){
+                                count -- ;
+                                ds.unionBySize(node , adjNode);
+                            }
+                        }
+                    }
+                }
+                ans.push_back(count);
+        }
+        return ans ;
+    }
+};
