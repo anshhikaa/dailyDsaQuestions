@@ -1,0 +1,90 @@
+//rows and cols becomes node , formula derived(totalStones-totalComponents)
+//use unordered_map to store nodes created to find the total componenets
+
+class DisjointSet{
+    public:
+    vector<int> rank , parent,size  ;
+    DisjointSet(int n ){
+        //attributes
+        rank.resize(n+1,0);
+        parent.resize(n+1);
+        size.resize(n+1);
+        for(int i = 0 ; i <= n ;i++){
+            parent[i]=i;
+            size[i] = 1;
+        }
+    }
+    //methods
+    int findParent(int node){
+        //base case
+        if(parent[node]==node) return node ;
+        //recursion
+        return parent[node]=findParent(parent[node]);
+    }
+    void unionByRank(int u , int v){
+        //find ultimate parent
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        //check rank(ultimate parent)
+        if(ulp_u == ulp_v) return ;
+        //connect smaller to the higher rank ultimate parent
+        if(rank[ulp_u] < rank[ulp_v]){
+            parent[ulp_u] = ulp_v;
+        }
+        else if(rank[ulp_v] < rank[ulp_u]){
+            parent[ulp_v] = ulp_u;
+        }
+        else{
+            parent[ulp_v] = ulp_u;
+             rank[ulp_u]++;
+        }
+    }
+     void unionBySize(int u , int v){
+        //find ultimate parent
+        int ulp_u = findParent(u);
+        int ulp_v = findParent(v);
+        //check size(ultimate parent)
+        if(ulp_u == ulp_v) return ;
+        if(size[ulp_u]<size[ulp_v]){
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] +=size[ulp_u];
+        }
+        else{
+            parent[ulp_v]=ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};        
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        //step 1 count the stones 
+       int totalStones = stones.size();
+       //step 2 create disjoint set find the dimensions of grid
+       int maxRow = 0;
+       int maxCol = 0 ;
+       for(auto it : stones){
+           maxRow = max(maxRow,it[0]);
+           maxCol = max(maxCol,it[1]);
+       }
+       DisjointSet ds(maxRow + maxCol+1);
+       unordered_map<int,int>stonesNode;
+       //step 3 make disjoint set of the coordinate with row&col
+       //row = 0,1,2,3,4 col = 5(1),6(2),7(3),8(4)
+       for(auto it: stones){
+        int rowNode = it[0];
+        int colNode = it[1] + maxRow + 1;
+        ds.unionBySize(rowNode,colNode);
+        stonesNode[rowNode]= 1 ;
+        stonesNode[colNode]= 1 ;
+       }
+       //find unique components
+       int count = 0 ;
+       for(auto it : stonesNode){
+        if(ds.findParent(it.first) == it.first){
+            count ++;
+        }
+       }
+       return totalStones- count;
+    }
+};
